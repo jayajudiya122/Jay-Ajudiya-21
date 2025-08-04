@@ -562,12 +562,12 @@ class LoadingScreen {
     }
 }
 
-// Particle System for Background Effect
-class ParticleSystem {
+// Gear System for Background Effect
+class GearSystem {
     constructor() {
         this.canvas = this.createCanvas();
         this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
+        this.gears = [];
         this.mouse = { x: 0, y: 0 };
         
         this.init();
@@ -583,7 +583,7 @@ class ParticleSystem {
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.4;
         `;
         document.body.appendChild(canvas);
         return canvas;
@@ -591,7 +591,7 @@ class ParticleSystem {
 
     init() {
         this.resize();
-        this.createParticles();
+        this.createGears();
         this.bindEvents();
         this.animate();
     }
@@ -609,62 +609,100 @@ class ParticleSystem {
         this.canvas.height = window.innerHeight;
     }
 
-    createParticles() {
-        const particleCount = Math.floor(window.innerWidth / 20);
+    createGears() {
+        const gearCount = Math.floor(window.innerWidth / 300);
         
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push({
+        for (let i = 0; i < gearCount; i++) {
+            this.gears.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                size: Math.random() * 2 + 1,
-                opacity: Math.random() * 0.5 + 0.2
+                radius: Math.random() * 40 + 20,
+                teeth: Math.floor(Math.random() * 8) + 8,
+                rotationSpeed: (Math.random() - 0.5) * 0.02,
+                currentRotation: Math.random() * Math.PI * 2,
+                color: `rgba(0, 212, 255, ${Math.random() * 0.3 + 0.1})`,
+                strokeColor: `rgba(0, 212, 255, ${Math.random() * 0.5 + 0.2})`
             });
         }
+    }
+
+    drawGear(gear) {
+        const { x, y, radius, teeth, currentRotation, color, strokeColor } = gear;
+        
+        this.ctx.save();
+        this.ctx.translate(x, y);
+        this.ctx.rotate(currentRotation);
+        
+        // Draw gear body
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = color;
+        this.ctx.fill();
+        this.ctx.strokeStyle = strokeColor;
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+        
+        // Draw gear teeth
+        for (let i = 0; i < teeth; i++) {
+            const angle = (i / teeth) * Math.PI * 2;
+            const toothLength = radius * 0.3;
+            const toothWidth = radius * 0.15;
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(
+                Math.cos(angle) * radius,
+                Math.sin(angle) * radius
+            );
+            this.ctx.lineTo(
+                Math.cos(angle) * (radius + toothLength),
+                Math.sin(angle) * (radius + toothLength)
+            );
+            this.ctx.lineWidth = toothWidth;
+            this.ctx.strokeStyle = strokeColor;
+            this.ctx.stroke();
+        }
+        
+        // Draw center circle
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
+        this.ctx.fillStyle = strokeColor;
+        this.ctx.fill();
+        
+        this.ctx.restore();
     }
 
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        this.particles.forEach((particle, index) => {
-            // Update position
-            particle.x += particle.vx;
-            particle.y += particle.vy;
+        this.gears.forEach((gear, index) => {
+            // Update rotation
+            gear.currentRotation += gear.rotationSpeed;
             
-            // Boundary check
-            if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
-            if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
-            
-            // Mouse interaction
-            const dx = this.mouse.x - particle.x;
-            const dy = this.mouse.y - particle.y;
+            // Mouse interaction - gears rotate faster when mouse is near
+            const dx = this.mouse.x - gear.x;
+            const dy = this.mouse.y - gear.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < 100) {
-                const force = (100 - distance) / 100;
-                particle.x -= dx * force * 0.01;
-                particle.y -= dy * force * 0.01;
+            if (distance < 150) {
+                const force = (150 - distance) / 150;
+                gear.rotationSpeed += force * 0.01;
             }
             
-            // Draw particle
-            this.ctx.beginPath();
-            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            this.ctx.fillStyle = `rgba(0, 212, 255, ${particle.opacity})`;
-            this.ctx.fill();
+            // Draw gear
+            this.drawGear(gear);
             
-            // Connect nearby particles
-            this.particles.slice(index + 1).forEach(otherParticle => {
-                const dx = particle.x - otherParticle.x;
-                const dy = particle.y - otherParticle.y;
+            // Draw connections between nearby gears
+            this.gears.slice(index + 1).forEach(otherGear => {
+                const dx = gear.x - otherGear.x;
+                const dy = gear.y - otherGear.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
-                if (distance < 80) {
+                if (distance < gear.radius + otherGear.radius + 50) {
                     this.ctx.beginPath();
-                    this.ctx.moveTo(particle.x, particle.y);
-                    this.ctx.lineTo(otherParticle.x, otherParticle.y);
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (80 - distance) / 80})`;
-                    this.ctx.lineWidth = 0.5;
+                    this.ctx.moveTo(gear.x, gear.y);
+                    this.ctx.lineTo(otherGear.x, otherGear.y);
+                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (200 - distance) / 200})`;
+                    this.ctx.lineWidth = 1;
                     this.ctx.stroke();
                 }
             });
@@ -866,9 +904,9 @@ document.addEventListener('DOMContentLoaded', () => {
     new ProjectFilter();
     new PerformanceMonitor();
     
-    // Initialize particle system if not on mobile
+    // Initialize gear system if not on mobile
     if (window.innerWidth > 768) {
-        new ParticleSystem();
+        new GearSystem();
     }
     
     // Add smooth reveal animation for page load
@@ -951,7 +989,7 @@ window.PortfolioApp = {
     ChartController,
     FormController,
     BackToTopButton,
-    ParticleSystem,
+    GearSystem,
     ProjectFilter,
     PerformanceMonitor,
     ThemeController
