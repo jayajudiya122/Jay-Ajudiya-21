@@ -21,7 +21,7 @@ A modern, professional portfolio website designed for data analytics engineers. 
 
 ### Technical Features
 - **Interactive Data Visualization**: Chart.js powered analytics chart in hero section
-- **Particle System**: Canvas-based background particles with mouse interaction
+- **Gear System**: Canvas-based background spinning gears with mouse interaction
 - **Project Filtering**: Dynamic project filtering system
 - **Form Handling**: Contact form with validation and feedback
 - **Performance Optimized**: Lazy loading, throttled scroll events, and optimized animations
