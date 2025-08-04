@@ -365,7 +365,10 @@ body {
 
 .first-principles-flow {
     width: 100%;
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(255, 255, 255, 0.05) 100%);
+    background: 
+        linear-gradient(135deg, var(--bg-secondary) 0%, rgba(255, 255, 255, 0.05) 100%),
+        radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
     border-radius: 25px;
     padding: var(--spacing-2xl);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -382,88 +385,101 @@ body {
     min-height: 600px;
 }
 
-/* Energy flow background effect */
+/* Gear flow background effect */
 .first-principles-flow::before {
-    content: '';
+    content: '⚙️';
     position: absolute;
-    top: -100%;
+    top: -50px;
     left: 50%;
-    width: 4px;
-    height: 300%;
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 212, 255, 0.8) 20%, 
-        rgba(0, 212, 255, 1) 50%, 
-        rgba(0, 212, 255, 0.8) 80%, 
-        transparent 100%);
+    font-size: 2rem;
     transform: translateX(-50%);
-    animation: energyFlow 3s ease-in-out infinite;
+    animation: gearFlow 4s ease-in-out infinite;
     z-index: 1;
+    opacity: 0.7;
 }
 
-@keyframes energyFlow {
-    0%, 100% { 
-        top: -100%; 
+@keyframes gearFlow {
+    0% { 
+        top: -50px; 
+        transform: translateX(-50%) rotate(0deg);
         opacity: 0.3;
     }
+    25% {
+        transform: translateX(-50%) rotate(90deg);
+        opacity: 0.8;
+    }
     50% { 
-        top: 100%; 
+        top: 50%; 
+        transform: translateX(-50%) rotate(180deg);
         opacity: 1;
+    }
+    75% {
+        transform: translateX(-50%) rotate(270deg);
+        opacity: 0.8;
+    }
+    100% { 
+        top: 100%; 
+        transform: translateX(-50%) rotate(360deg);
+        opacity: 0.3;
     }
 }
 
-/* Central flow line */
+/* Central gear chain line */
 .first-principles-flow::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     left: 50%;
-    width: 2px;
-    background: linear-gradient(180deg, 
-        transparent 0%, 
-        rgba(0, 212, 255, 0.3) 20%, 
-        rgba(0, 212, 255, 0.6) 50%, 
-        rgba(0, 212, 255, 0.3) 80%, 
-        transparent 100%);
+    width: 4px;
+    background: repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 15px,
+        rgba(0, 212, 255, 0.6) 15px,
+        rgba(0, 212, 255, 0.6) 25px,
+        transparent 25px,
+        transparent 40px
+    );
     transform: translateX(-50%);
     z-index: 1;
-    animation: flowLine 4s ease-in-out infinite;
+    animation: gearChain 3s linear infinite;
 }
 
-/* Data flow dots */
+/* Gear connection dots */
 .flow-step .data-dot {
-    content: '';
+    content: '⚙️';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8px;
-    height: 8px;
-    background: var(--primary-color);
-    border-radius: 50%;
+    font-size: 1.2rem;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-    animation: dataFlow 3s ease-in-out infinite;
+    animation: gearSpin 2s linear infinite;
     z-index: 3;
+    opacity: 0.8;
 }
 
-@keyframes dataFlow {
-    0%, 100% { 
-        opacity: 0.3; 
-        transform: translate(-50%, -50%) scale(0.8);
+@keyframes gearSpin {
+    0% { 
+        transform: translate(-50%, -50%) rotate(0deg);
+        opacity: 0.6;
     }
     50% { 
-        opacity: 1; 
-        transform: translate(-50%, -50%) scale(1.2);
+        transform: translate(-50%, -50%) rotate(180deg);
+        opacity: 1;
+    }
+    100% { 
+        transform: translate(-50%, -50%) rotate(360deg);
+        opacity: 0.6;
     }
 }
 
-@keyframes flowLine {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.8; }
+@keyframes gearChain {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 40px; }
 }
 
-/* Floating particles background */
+/* Floating gears background */
 .first-principles-flow .floating-particles {
     position: absolute;
     top: 0;
@@ -476,43 +492,45 @@ body {
 
 .first-principles-flow .floating-particles::before,
 .first-principles-flow .floating-particles::after {
-    content: '';
+    content: '🔧';
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(0, 212, 255, 0.6);
-    border-radius: 50%;
-    animation: floatParticle 6s ease-in-out infinite;
+    font-size: 1.5rem;
+    animation: floatGear 8s ease-in-out infinite;
+    opacity: 0.6;
 }
 
 .first-principles-flow .floating-particles::before {
-    left: 20%;
+    left: 15%;
     animation-delay: 0s;
 }
 
 .first-principles-flow .floating-particles::after {
-    right: 20%;
-    animation-delay: 3s;
+    right: 15%;
+    animation-delay: 4s;
 }
 
-@keyframes floatParticle {
+@keyframes floatGear {
     0%, 100% { 
-        top: -10px; 
+        top: -20px; 
         opacity: 0; 
-        transform: scale(0);
+        transform: rotate(0deg) scale(0.8);
     }
     25% { 
-        opacity: 1; 
-        transform: scale(1);
+        opacity: 0.8; 
+        transform: rotate(90deg) scale(1);
+    }
+    50% { 
+        opacity: 0.6; 
+        transform: rotate(180deg) scale(1.1);
     }
     75% { 
-        opacity: 1; 
-        transform: scale(1);
+        opacity: 0.8; 
+        transform: rotate(270deg) scale(1);
     }
     100% { 
         top: 100%; 
         opacity: 0; 
-        transform: scale(0);
+        transform: rotate(360deg) scale(0.8);
     }
 }
 
@@ -707,12 +725,12 @@ body {
     font-weight: 400;
 }
 
-/* Enhanced arrows with energy flow */
+/* Enhanced arrows with gear flow */
 .flow-arrow {
     color: var(--primary-color);
     font-size: 1.5rem;
     opacity: 0.8;
-    animation: flowPulse 2s ease-in-out infinite;
+    animation: gearArrowPulse 2s ease-in-out infinite;
     position: relative;
     z-index: 2;
     display: flex;
@@ -747,7 +765,7 @@ body {
     animation: flowLinePulse 2s ease-in-out infinite;
 }
 
-@keyframes flowPulse {
+@keyframes gearArrowPulse {
     0%, 100% { 
         opacity: 0.8; 
         transform: rotate(90deg) scale(1);
