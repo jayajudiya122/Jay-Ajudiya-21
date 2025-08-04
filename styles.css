@@ -340,14 +340,96 @@ body {
     gap: var(--spacing-xl);
 }
 
-.data-visualization {
-    width: 400px;
-    height: 300px;
+.first-principles-flow {
+    width: 100%;
     background: var(--bg-secondary);
     border-radius: 20px;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-xl);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.flow-step {
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    flex: 1;
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
+}
+
+.flow-step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-2xl);
+}
+
+.step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md);
+    font-size: 1.5rem;
+    transition: transform var(--transition-normal);
+}
+
+.step-icon:hover {
+    transform: scale(1.1);
+}
+
+.problem-icon {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    color: white;
+}
+
+.principle-icon {
+    background: linear-gradient(135deg, #4ecdc4, #7dd3d8);
+    color: white;
+}
+
+.action-icon {
+    background: linear-gradient(135deg, #ffe66d, #fff2a1);
+    color: #333;
+}
+
+.result-icon {
+    background: linear-gradient(135deg, #51cf66, #8ce99a);
+    color: white;
+}
+
+.step-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.step-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.flow-arrow {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    opacity: 0.7;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
 }
 
 .floating-stats {
@@ -1147,9 +1229,20 @@ body {
         align-items: center;
     }
     
-    .data-visualization {
-        width: 100%;
-        max-width: 350px;
+    .first-principles-flow {
+        flex-direction: column;
+        padding: var(--spacing-lg);
+    }
+    
+    .flow-step {
+        min-width: 100%;
+        max-width: 100%;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: var(--spacing-sm) 0;
     }
     
     .floating-stats {
