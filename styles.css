@@ -359,17 +359,37 @@ body {
     backdrop-filter: blur(10px);
 }
 
+/* Energy flow background effect */
 .first-principles-flow::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    animation: shimmer 3s infinite;
+    top: -100%;
+    left: 50%;
+    width: 4px;
+    height: 300%;
+    background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(0, 212, 255, 0.8) 20%, 
+        rgba(0, 212, 255, 1) 50%, 
+        rgba(0, 212, 255, 0.8) 80%, 
+        transparent 100%);
+    transform: translateX(-50%);
+    animation: energyFlow 3s ease-in-out infinite;
+    z-index: 1;
 }
 
+@keyframes energyFlow {
+    0%, 100% { 
+        top: -100%; 
+        opacity: 0.3;
+    }
+    50% { 
+        top: 100%; 
+        opacity: 1;
+    }
+}
+
+/* Central flow line */
 .first-principles-flow::after {
     content: '';
     position: absolute;
@@ -388,14 +408,89 @@ body {
     animation: flowLine 4s ease-in-out infinite;
 }
 
+/* Data flow dots */
+.flow-step .data-dot {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    animation: dataFlow 3s ease-in-out infinite;
+    z-index: 3;
+}
+
+@keyframes dataFlow {
+    0%, 100% { 
+        opacity: 0.3; 
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    50% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
 @keyframes flowLine {
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.8; }
 }
 
-@keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
+/* Floating particles background */
+.first-principles-flow .floating-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.first-principles-flow .floating-particles::before,
+.first-principles-flow .floating-particles::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(0, 212, 255, 0.6);
+    border-radius: 50%;
+    animation: floatParticle 6s ease-in-out infinite;
+}
+
+.first-principles-flow .floating-particles::before {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.first-principles-flow .floating-particles::after {
+    right: 20%;
+    animation-delay: 3s;
+}
+
+@keyframes floatParticle {
+    0%, 100% { 
+        top: -10px; 
+        opacity: 0; 
+        transform: scale(0);
+    }
+    25% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    75% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    100% { 
+        top: 100%; 
+        opacity: 0; 
+        transform: scale(0);
+    }
 }
 
 .flow-step {
@@ -412,6 +507,26 @@ body {
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.05);
     overflow: hidden;
+    z-index: 2;
+}
+
+/* Step entrance animation */
+.flow-step {
+    animation: stepEntrance 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+}
+
+.flow-step:nth-child(2) { animation-delay: 0.3s; }
+.flow-step:nth-child(4) { animation-delay: 0.6s; }
+.flow-step:nth-child(6) { animation-delay: 0.9s; }
+.flow-step:nth-child(8) { animation-delay: 1.2s; }
+
+@keyframes stepEntrance {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .flow-step .particle-effect {
@@ -462,6 +577,7 @@ body {
     transform: scaleX(1);
 }
 
+/* Enhanced step icons with pulsing rings */
 .step-icon {
     width: 70px;
     height: 70px;
@@ -489,6 +605,29 @@ body {
     transition: opacity 0.3s ease;
 }
 
+.step-icon::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 50%;
+    animation: pulseRing 2s ease-in-out infinite;
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
 .flow-step:hover .step-icon {
     transform: scale(1.1) rotate(5deg);
 }
@@ -497,6 +636,7 @@ body {
     opacity: 1;
 }
 
+/* Enhanced icon gradients with animation */
 .problem-icon {
     background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ff6b6b);
     color: white;
@@ -544,6 +684,7 @@ body {
     font-weight: 400;
 }
 
+/* Enhanced arrows with energy flow */
 .flow-arrow {
     color: var(--primary-color);
     font-size: 1.5rem;
@@ -555,30 +696,6 @@ body {
     align-items: center;
     justify-content: center;
     transform: rotate(90deg);
-}
-
-.flow-arrow::after {
-    content: '';
-    position: absolute;
-    width: 2px;
-    height: 60px;
-    background: linear-gradient(180deg, 
-        rgba(0, 212, 255, 0.8) 0%, 
-        rgba(0, 212, 255, 0.4) 50%, 
-        rgba(0, 212, 255, 0.8) 100%);
-    border-radius: 1px;
-    animation: flowLinePulse 2s ease-in-out infinite;
-}
-
-@keyframes flowLinePulse {
-    0%, 100% { 
-        opacity: 0.4; 
-        transform: scaleX(0.8);
-    }
-    50% { 
-        opacity: 0.8; 
-        transform: scaleX(1.2);
-    }
 }
 
 .flow-arrow::before {
@@ -594,14 +711,27 @@ body {
     animation: ripple 2s ease-in-out infinite;
 }
 
+.flow-arrow::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(180deg, 
+        rgba(0, 212, 255, 0.8) 0%, 
+        rgba(0, 212, 255, 0.4) 50%, 
+        rgba(0, 212, 255, 0.8) 100%);
+    border-radius: 1px;
+    animation: flowLinePulse 2s ease-in-out infinite;
+}
+
 @keyframes flowPulse {
     0%, 100% { 
         opacity: 0.8; 
-        transform: scale(1);
+        transform: rotate(90deg) scale(1);
     }
     50% { 
         opacity: 1; 
-        transform: scale(1.1);
+        transform: rotate(90deg) scale(1.1);
     }
 }
 
@@ -613,6 +743,17 @@ body {
     100% {
         transform: translate(-50%, -50%) scale(1.5);
         opacity: 0;
+    }
+}
+
+@keyframes flowLinePulse {
+    0%, 100% { 
+        opacity: 0.4; 
+        transform: scaleY(0.8);
+    }
+    50% { 
+        opacity: 0.8; 
+        transform: scaleY(1.2);
     }
 }
 
