@@ -1128,7 +1128,7 @@ body {
 
 .project-image {
     position: relative;
-    height: 200px;
+    aspect-ratio: 3/2;
     overflow: hidden;
 }
 
