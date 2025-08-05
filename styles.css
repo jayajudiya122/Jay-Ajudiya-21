@@ -1108,7 +1108,9 @@ body {
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
     gap: var(--spacing-2xl);
+    max-width: 100%;
 }
 
 .project-card {
@@ -1118,6 +1120,8 @@ body {
     border: 1px solid var(--border-color);
     transition: all var(--transition-normal);
     group: project;
+    width: 100%;
+    max-width: 100%;
 }
 
 .project-card:hover {
